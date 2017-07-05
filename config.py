@@ -10,12 +10,12 @@ class Config:
 
 class DevelopmentConfig(Config):
     DEBUG = True
-    SQLALCHEMY_DATABASE_URI = 'postgres://postgres:6ktxT9@127.0.0.1:5432/flaskr'
+    SQLALCHEMY_DATABASE_URI = 'postgres://postgres@127.0.0.1:5432/flaskr'
 
 
 class TestingConfig(Config):
     TESTING = True
-    SQLALCHEMY_DATABASE_URI = 'postgres://postgres:6ktxT9@127.0.0.1:5432/flaskr_test'
+    SQLALCHEMY_DATABASE_URI = 'postgres://postgres@127.0.0.1:5432/flaskr_test'
 
 
 class ProductionConfig(Config):

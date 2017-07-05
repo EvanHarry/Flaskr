@@ -1,0 +1,13 @@
+language: python
+
+python: "3.5"
+
+install: "pip install -r requirements.txt"
+
+services:
+  - postgresql
+
+before_script:
+  - psql -c 'create database flaskr_test;' -U postgres
+
+script: "python manage.py test"
