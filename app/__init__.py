@@ -13,7 +13,7 @@ def create_app(config_name):
 
     db.init_app(app)
 
-    from .main import main as main_blueprint
+    from .main import main_blueprint
     app.register_blueprint(main_blueprint)
 
     from .user import user_blueprint
