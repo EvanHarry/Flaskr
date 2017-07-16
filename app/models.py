@@ -38,7 +38,7 @@ class User(db.Model):
             'id': self.id,
             'username': self.username,
             'admin': self.admin,
-            'task': [task.to_simple_json() for task in self.tasks]
+            'tasks': [task.to_simple_json() for task in self.tasks]
         }
         return json_user
 
