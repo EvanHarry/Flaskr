@@ -34,5 +34,17 @@ def test():
     unittest.TextTestRunner(verbosity=2).run(tests)
 
 
+@manager.command
+def seed():
+    user = User.query.filter_by(username="evan").first()
+    if user is not None:
+        print("Database already seeded...")
+    else:
+        u = User(username="evan", password="python", admin=True)
+        db.session.add(u)
+        db.session.commit()
+        print("Database seeded...")
+
+
 if __name__ == '__main__':
     manager.run()
