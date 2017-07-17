@@ -31,16 +31,10 @@ def get_task(task_id):
 @task_blueprint.route('/tasks', methods=['POST'])
 @auth.login_required
 def create_task():
-    if not request.json or 'title' and 'description' not in request.json:
+    data = request.get_json()
+    if data is None or not data.keys() >= {'title', 'description'}:
         abort(400)
-    # tasks = Task.query.filter_by(username=request.json['username']).first()
-    # if users is not None:
-    #     abort(400)
-    # if 'admin' not in request.json:
-    #     admin = False
-    # else:
-    #     admin = request.json['admin']
-    task = Task(title=request.json['title'], description=request.json['description'], user=g.current_user)
+    task = Task(title=data['title'], description=data['description'], user=g.current_user)
     db.session.add(task)
     db.session.commit()
     return jsonify(task.to_json()), 201
@@ -62,13 +56,14 @@ def delete_task(task_id):
 @auth.login_required
 @user_only
 def update_task(task_id):
+    data = request.get_json()
     task = Task.query.get(task_id)
     if task is None:
         abort(404)
-    if not request.json:
+    if data is None:
         abort(400)
-    task.title = request.json.get('title', task.title)
-    task.description = request.json.get('description', task.description)
-    task.completed = request.json.get('completed', task.completed)
+    task.title = data.get('title', task.title)
+    task.description = data.get('description', task.description)
+    task.completed = data.get('completed', task.completed)
     db.session.add(task)
     return jsonify({'task': task.to_json()}), 200

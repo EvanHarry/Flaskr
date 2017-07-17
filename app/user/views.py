@@ -29,16 +29,14 @@ def get_user(user_id):
 @auth.login_required
 @admin_required
 def create_user():
-    if not request.json or 'username' and 'password' not in request.json:
+    data = request.get_json()
+    if data is None or not data.keys() >= {'username', 'password'}:
         abort(400)
-    users = User.query.filter_by(username=request.json['username']).first()
+    users = User.query.filter_by(username=data['username']).first()
     if users is not None:
         abort(400)
-    if 'admin' not in request.json:
-        admin = False
-    else:
-        admin = request.json['admin']
-    user = User(username=request.json['username'], password=request.json['password'], admin=admin)
+    user = User(username=data['username'], password=data['password'])
+    user.admin = data.get('admin', False)
     db.session.add(user)
     db.session.commit()
     return jsonify(user.to_json()), 201
@@ -60,11 +58,12 @@ def delete_user(user_id):
 @auth.login_required
 @admin_required
 def update_user(user_id):
+    data = request.get_json()
     user = User.query.get(user_id)
     if user is None:
         abort(404)
-    if not request.json:
+    if data is None:
         abort(400)
-    user.admin = request.json.get('admin', user.admin)
+    user.admin = data.get('admin', user.admin)
     db.session.add(user)
     return jsonify({'user': user.to_json()}), 200
