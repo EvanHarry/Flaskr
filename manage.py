@@ -36,14 +36,14 @@ def test():
 
 @manager.command
 def seed():
-    user = User.query.filter_by(username="evan").first()
+    user = User.query.filter_by(username='evan').first()
     if user is not None:
-        print("Database already seeded...")
+        print('Database already seeded...')
     else:
-        u = User(username="evan", password="python", admin=True)
+        u = User(username='evan', password='python', admin=True)
         db.session.add(u)
         db.session.commit()
-        print("Database seeded...")
+        print('Database seeded...')
 
 
 @manager.command
@@ -53,6 +53,7 @@ def generate_secret():
     with open(file, mode) as f:
         key = os.urandom(32)
         f.write('\nFLASKR_SECRET_KEY={0}'.format(key))
+        print('Random key generated...')
 
 
 if __name__ == '__main__':
