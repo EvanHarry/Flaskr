@@ -1,4 +1,3 @@
-from base64 import b64encode
 import os
 
 from flask_script import Manager, Shell
@@ -7,12 +6,6 @@ from raven.contrib.flask import Sentry
 
 from app import create_app, db
 from app.models import User, Task
-
-if os.path.exists('.env'):
-    for line in open('.env'):
-        var = line.strip().split('=')
-        if len(var) == 2:
-            os.environ[var[0]] = var[1]
 
 app = create_app(os.getenv('FLASK_CONFIG') or 'default')
 manager = Manager(app)
@@ -45,6 +38,27 @@ def seed():
         db.session.add(u)
         db.session.commit()
         print('Database seeded...')
+
+
+@manager.command
+def setup():
+    from base64 import b64encode
+
+    file = '.env'
+    with open(file, 'w') as f:
+        key = b64encode(os.urandom(32)).decode('utf-8')
+        f.write('FLASK_CONFIG=production\n')
+        f.write('SENTRY_DSN=https://97f3a312f156434aa6c3e3274e7c8cde:0f53751a8d254af183353196a961d148@sentry.io'
+                '/188344\n')
+        f.write('SECRET_KEY={0}\n'.format(key))
+        print('Environment variables set...')
+
+
+@manager.command
+def deploy():
+    from flask_migrate import upgrade
+
+    upgrade()
 
 
 if __name__ == '__main__':
