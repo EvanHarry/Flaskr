@@ -47,13 +47,14 @@ def seed():
 
 
 @manager.command
-def generate_secret():
+def deploy():
     file = '.env'
-    mode = 'a' if os.path.exists(file) else 'w'
-    with open(file, mode) as f:
+    with open(file, 'w') as f:
         key = os.urandom(32)
+        f.write('FLASK_CONFIG=production\n')
+        f.write('SENTRY_DSN=https://97f3a312f156434aa6c3e3274e7c8cde:0f53751a8d254af183353196a961d148@sentry.io/188344')
         f.write('\nFLASKR_SECRET_KEY={0}'.format(key))
-        print('Random key generated...')
+        print('Application deployed...')
 
 
 if __name__ == '__main__':
