@@ -46,5 +46,14 @@ def seed():
         print("Database seeded...")
 
 
+@manager.command
+def generate_secret():
+    file = '.env'
+    mode = 'a' if os.path.exists(file) else 'w'
+    with open(file, mode) as f:
+        key = os.urandom(32)
+        f.write('\nFLASKR_SECRET_KEY={0}'.format(key))
+
+
 if __name__ == '__main__':
     manager.run()
