@@ -47,16 +47,5 @@ def seed():
         print('Database seeded...')
 
 
-@manager.command
-def deploy():
-    file = '.env'
-    with open(file, 'w') as f:
-        key = b64encode(os.urandom(32)).decode('utf-8')
-        f.write('FLASK_CONFIG=production\n')
-        f.write('SENTRY_DSN=https://97f3a312f156434aa6c3e3274e7c8cde:0f53751a8d254af183353196a961d148@sentry.io/188344')
-        f.write('\nFLASKR_SECRET_KEY={0}'.format(key))
-        print('Application deployed...')
-
-
 if __name__ == '__main__':
     manager.run()
